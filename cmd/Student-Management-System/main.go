@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/ShamirMaharjan/Student-management-system--GO/internal/config"
+	"github.com/ShamirMaharjan/Student-management-system--GO/internal/http/controller/student"
 )
 
 func main() {
@@ -21,9 +22,7 @@ func main() {
 	//setup router
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello student system"))
-	})
+	router.HandleFunc("POST /api/students", student.CreateStudent())
 
 	//setup server
 
