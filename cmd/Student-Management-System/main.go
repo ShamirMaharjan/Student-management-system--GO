@@ -12,12 +12,22 @@ import (
 
 	"github.com/ShamirMaharjan/Student-management-system--GO/internal/config"
 	"github.com/ShamirMaharjan/Student-management-system--GO/internal/http/controller/student"
+	"github.com/ShamirMaharjan/Student-management-system--GO/storage/sqlite"
 )
 
 func main() {
 
 	//load config
 	cfg := config.MustLoad()
+
+	//setup database
+	_, err := sqlite.New(cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	slog.Info("Database connected", slog.String("database", cfg.StoragePath))
 
 	//setup router
 	router := http.NewServeMux()
@@ -57,7 +67,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := server.Shutdown(ctx)
+	err = server.Shutdown(ctx)
 
 	if err != nil {
 		slog.Error("Failed to shutdown server", slog.String("error", err.Error()))
